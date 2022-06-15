@@ -67,6 +67,7 @@ class CovSpectrumParameters(NamedTuple):
     Call the Cov Spectrum api with the input parameters. 
     This class will stage the parameters to query as their may be multiple
     """
+    fields: str = None # this guy is special in that it returns a break down of the category provided e.g. pango lineage country etc.
     nucMutations: str = None
     dateFrom: str = None # data appears to be from a string in the api
     aaMutations: str = None
@@ -89,12 +90,11 @@ class CovSpectrumAPICaller:
         """
         for req in self.api_requests:
             data_ = requests.get(self.api_uri, params=req._asdict())
+            print(data_.url)
             print("Response", data_.status_code)
             print("Info", data_.json()['info'])
             print("Data", data_.json()['data'])
             print("Errors", data_.json()['errors'])
-
-#print(response_.json()['data'])
 
 
 if __name__ == "__main__":
@@ -102,7 +102,7 @@ if __name__ == "__main__":
         CovSpectrumParameters(nucMutations="241T"), 
         CovSpectrumParameters(nucMutations="241T", country="Canada"), 
         CovSpectrumParameters(nucMutations="241T", country="Canada", dateFrom="2021-01-06"),
-        CovSpectrumParameters(pangoLineage="BA.5", dateFrom="2021-01-06")]
+        CovSpectrumParameters(fields="country", pangoLineage="BA.5", dateFrom="2021-01-06")]
     
     t1 = CovSpectrumAPICaller(test_list)
     t1.call_api()
