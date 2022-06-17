@@ -82,7 +82,7 @@ class GatherAPIData:
         """
         Actually call the api and collect the data 
         """
-        mutation_queries = IntakeMutationSheet(self.vcfparser_sheet)
+        mutation_queries = IntakeMutationSheet(self.vcfparser_sheet, False)
         out = CovSpectrumAPICaller(mutation_queries.api_requests)
         return out
 

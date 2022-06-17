@@ -8,6 +8,7 @@ First attempt at visualizeing the CovSpectrum in a dashboard using bokeh
 from CovSpectrum_api import GatherAPIData
 from bokeh.plotting import figure, show, save, output_file
 from bokeh.models import Legend
+from bokeh.palettes import Category20c_20 as pallette
 import pandas as pd
 from typing import NamedTuple
 import random
@@ -43,11 +44,12 @@ class JsontoFigure:
                 }
                 for idx in self.plot_data[plit].index:
                     data_plot[idx] = [i for i in self.plot_data[plit].loc[idx, :]]
-
-                p = figure(x_range=data_plot["dates"], title=f"Lineage changes over time {key}", width=1000, height=1000)
+                lineages = [i for i in self.plot_data[plit].index]
+                p = figure(x_range=data_plot["dates"], title=f"Lineage changes over time ({key})", 
+                tools="hover", tooltips="$name @$name %", width=1000, height=1000)
                 p.add_layout(Legend(), 'right')
                 p.vbar_stack([i for i in self.plot_data[plit].index], x="dates", source=data_plot, width=0.9, 
-                color=self.create_random_colors(len(data_plot.keys()) - 1), 
+                color=[pallette[i] for i in range(len(lineages))], 
                 legend_label=[i for i in self.plot_data[plit].index]) # get random colurs for each lineage
                 p.xaxis.major_label_orientation = "vertical"
                 output_file(filename=f"outputs/{key}.html", title=key)
