@@ -160,6 +160,7 @@ class CovSpectrumAPICaller:
             else:
                 response_info = {}
                 response_info["Mutation"] = req.nucMutations
+                response_info["Date"] = req.dateFrom
                 response_info["data"] = data_.json()['data']
                 yield response_info
                 #yield response_info
